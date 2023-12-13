@@ -197,4 +197,14 @@ defmodule Ukio.Apartments do
   def change_booking(%Booking{} = booking, attrs \\ %{}) do
     Booking.changeset(booking, attrs)
   end
+
+
+  def get_num_bookings_for_date(apartment_id, checkin_date) do
+    d_checking_date = Date.from_iso8601!(checkin_date)
+    query = from b in "bookings",
+    where: b.apartment_id == type(^apartment_id, :integer) and b.check_in >= ^d_checking_date and b.check_out >= ^d_checking_date,
+    select: count()
+    Repo.one(query)
+  end
+
 end
